@@ -1,0 +1,36 @@
+<html>
+<head>
+    <title>Options for IRC Notifications</title>
+    <script type="text/javascript" src="options.js"></script>
+	<link rel="stylesheet" href="prettyForms.css" type=”text/css" media=”screen" />
+	<script type="text/javascript" src="prettyForms.js"></script>
+	<style type="text/css">
+	body{
+		font:75%/150% "Trebuchet MS", "Lucida Grande", "Bitstream Vera Sans", Arial, Helvetica, sans-serif;
+		color:#666666;
+		margin:60px;
+	}
+	</style>
+</head>
+ 
+<body onload="loadOptions(); prettyForms()">
+    <h1>IRC Notification Options</h1>
+	
+	<div style="position: relative; width: 300px; ">
+	
+	<div style="width:90px; position:absolute; left: 0; top: 3px;">
+	Timeout Delay: 
+	</div>
+	
+	<div style="width:125px; position:absolute; left: 95px;">
+	<input type="text" name="timeoutDelay" id="timeoutDelay"/>
+	</div>
+	
+	</div>
+	
+    <br />
+    <button onclick="saveOptions()">Save</button>
+    <br />
+    <button onclick="eraseOptions()">Restore default</button>
+</body>
+</html>

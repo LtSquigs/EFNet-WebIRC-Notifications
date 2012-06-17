@@ -1,0 +1,100 @@
+<html>
+  <script>
+ 
+	var notifications = new Array();
+	notifications[0] = undefined;
+	notifications[1] = undefined;
+	notifications[2] = undefined;
+	notifications[3] = undefined;
+	
+	var notificationsTimeout = new Array();
+	notificationsTimeout[0] = undefined;
+	notificationsTimeout[1] = undefined;
+	notificationsTimeout[2] = undefined;
+	notificationsTimeout[3] = undefined;
+	
+	
+	var curIn = -1;
+	
+	localStorage["enabled"] = true;
+ 
+	chrome.pageAction.onClicked.addListener( function(tab) 
+	{
+		if(localStorage["enabled"] == "true")
+		{
+			chrome.pageAction.setIcon({tabId: tab.id, path: "greyrainbow.jpg"});
+			localStorage["enabled"] = false;
+		} else {
+			chrome.pageAction.setIcon({tabId: tab.id, path: "rainbow.jpg"});
+			localStorage["enabled"] = true;
+		}
+		
+	});
+	
+	chrome.extension.onRequest.addListener(
+		function(request, sender, sendResponse) {
+		
+			if(request.type == "sendNotification")
+			{
+		
+				var getUrl =  chrome.extension.getURL("notification.html");
+				var text = encodeURIComponent(request.text);
+				var title = encodeURIComponent(request.title);
+				var highlight = encodeURIComponent(request.highlight);
+				
+				var notification = window.webkitNotifications.createHTMLNotification(getUrl + "?notificationText="+text+"&title="+title+"&me="+highlight);
+
+				var nextIndex = (curIn + 1) % 4;
+				
+				if(notifications[nextIndex] != undefined)
+				{
+					notifications[nextIndex].cancel();
+					clearTimeout(notificationsTimeout[nextIndex]);
+					
+				}
+				
+				var timeout = localStorage["timeout"];
+				if(timeout == undefined)
+					timeout = 5000;
+					
+				notifications[nextIndex] = notification;
+				notificationsTimeout[nextIndex] = setTimeout("clearOutNotifications(" + nextIndex + ")", timeout);
+				curIn = curIn + 1;
+				
+				notification.show();
+				
+				sendResponse({});
+			}
+			
+			if(request.type == "showPageAction")
+			{
+				chrome.pageAction.show(sender.tab.id);
+				
+				if(localStorage["enabled"] == "true")
+				{
+					chrome.pageAction.setIcon({tabId: sender.tab.id, path: "rainbow.jpg"});
+				} else {
+					chrome.pageAction.setIcon({tabId: sender.tab.id, path: "greyrainbow.jpg"});
+				}
+				
+				sendResponse({});
+			}
+			
+			if(request.type == "enabled")
+			{
+				if(localStorage["enabled"] == "true")
+				{
+					sendResponse({enabled: true});
+				} else {
+					sendResponse({enabled: false});
+				}
+			}
+	});
+	
+	function clearOutNotifications(index) {
+		notifications[index].cancel();
+		notificationsTimeout[index] = undefined;
+	}
+  
+  </script>
+</html>

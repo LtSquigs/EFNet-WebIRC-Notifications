@@ -1,0 +1,19 @@
+{
+  "name": "EFNet IRC Notifications",
+  "version": "1.2",
+  "description" : "Gives notifications when something has been said in IRC",
+  "permissions": [
+    "notifications", 
+	"tabs"
+  ],
+  "page_action": {
+	"default_title": "Toggle Notifications"
+  },
+  "options_page": "options.html",
+  "background_page": "background.html",
+  "content_scripts": [
+    {
+      "matches": ["http://chat.efnet.org/*"],
+      "js": ["jquery.js", "notifications.js"]
+    }]
+}

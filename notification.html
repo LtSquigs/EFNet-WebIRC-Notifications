@@ -1,0 +1,67 @@
+<html>
+<head>
+	<title>IRC Notification</title>
+	<style>
+		div
+		{
+			font-size: .9em;
+		}
+	
+	</style>
+    <script type="text/javascript" src="jquery.js"></script>
+</head>
+<body>
+	
+
+	<script>
+	
+	function htmlEncode(value){
+	  return $('<div/>').text(value).html();
+	}
+
+	function htmlDecode(value){
+	  return $('<div/>').html(value).text();
+	}
+	function getParameterByName(name)
+	{
+	  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+	  var regexS = "[\\?&]" + name + "=([^&#]*)";
+	  var regex = new RegExp(regexS);
+	  var results = regex.exec(window.location.href);
+	  if(results == null)
+		return "";
+	  else
+		return decodeURIComponent(results[1].replace(/\+/g, " "));
+	}
+	</script>
+	
+	<script>
+		var me = getParameterByName("me");
+		if(me == "true")
+		{
+			document.write('<div style="background-color: yellow">');
+		}
+	
+	</script>
+	
+	<div>
+	<b>
+	<pre><script>document.write(getParameterByName("title"));</script></pre>
+	</b>
+	</div>
+	
+	<script>
+		var me = getParameterByName("me");
+		if(me == "true")
+		{
+			document.write('</div>');
+		}
+	
+	</script>
+	<div>
+	<script>document.write(htmlEncode(getParameterByName("notificationText")));</script>
+	</div>
+	
+</body>
+
+</html>
